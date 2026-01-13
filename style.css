@@ -31,6 +31,24 @@ h2 { margin: 0; font-weight: 700; color: #333; }
 .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 .btn-skip { background: #eee; color: #555; margin-top: 10px; }
 
+.certificate {
+    background: #fff8e1;
+    border: 5px double var(--coffee-med);
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.certificate h4 { font-family: 'Georgia', serif; color: var(--coffee-dark); }
+.fun-fact-box {
+    font-style: italic;
+    font-size: 0.9em;
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
 /* Cards & Grids */
 .selection-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
 .select-card { border: 2px solid #eee; border-radius: var(--radius); padding: 25px; text-align: center; cursor: pointer; transition: 0.2s; }
@@ -61,3 +79,4 @@ input[type=range] { flex-grow: 1; accent-color: #333; height: 6px; }
 .measure-grid { display: flex; flex-wrap: wrap; gap: 10px; }
 .measure-btn { border: 1px solid #ddd; background: white; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9em; transition: 0.2s; }
 .measure-btn.active { background: var(--col-mat); color: white; border-color: var(--col-mat); }
+
