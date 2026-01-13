@@ -1,4 +1,4 @@
-import { TRANSLATIONS, CAT_STRUCT, DATA, MEASURE_DEFS } from './data.js';
+import { TRANSLATIONS, CAT_STRUCT, DATA, MEASURE_DEFS, FUN_FACTS } from './data.js';
 
 export const game = {
     lang: 'de',
@@ -12,7 +12,9 @@ export const game = {
     setLang: function(l) {
         this.lang = l;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.querySelector(`.lang-btn[onclick*="${l}"]`).classList.add('active');
+        const btn = document.querySelector(`.lang-btn[onclick*="${l}"]`);
+        if(btn) btn.classList.add('active');
+        
         this.updateTexts();
         if(this.step === 2) this.initPhase2();
         if(this.step === 3) this.initPhase3();
@@ -58,7 +60,7 @@ export const game = {
         if(s === 3) this.initPhase3();
         if(s === 4) this.initPhase4();
         if(s === 5) this.initPhase5();
-        lucide.createIcons();
+        if(window.lucide) window.lucide.createIcons();
     },
 
     initPhase2: function() {
@@ -70,14 +72,14 @@ export const game = {
             const el = document.createElement('div');
             el.className = 'card'; el.dataset.phase = c.phase; el.dataset.id = c.id;
             el.innerHTML = `<i data-lucide="${c.icon}" size="14"></i> ${this.t('cats.'+c.id+'.l')}`;
-            if(c.phase === "Material") el.style.borderLeftColor = "var(--col-mat)";
-            if(c.phase === "Herstellung") el.style.borderLeftColor = "var(--col-prod)";
-            if(c.phase === "Nutzung") el.style.borderLeftColor = "var(--col-use)";
-            if(c.phase === "EoL") el.style.borderLeftColor = "var(--col-eol)";
+            const colors = { Material: "var(--col-mat)", Herstellung: "var(--col-prod)", Nutzung: "var(--col-use)", EoL: "var(--col-eol)" };
+            el.style.borderLeftColor = colors[c.phase];
             src.appendChild(el);
             lex.innerHTML += `<div class="info-detail"><strong>${this.t('cats.'+c.id+'.l')}:</strong> ${this.t('cats.'+c.id+'.s')}</div>`;
         });
-        [src, ...document.querySelectorAll('.drop-zone')].forEach(el => { new Sortable(el, { group: 'g', animation: 150 }); });
+        if(window.Sortable) {
+            [src, ...document.querySelectorAll('.drop-zone')].forEach(el => { new Sortable(el, { group: 'g', animation: 150 }); });
+        }
     },
 
     checkSort: function() {
@@ -122,8 +124,10 @@ export const game = {
 
     updateSum: function() {
         const d = document.getElementById('sumDisplay');
-        d.innerText = `${this.t('sum')}: ${this.sum} / 100`;
-        d.style.color = this.sum === 100 ? "var(--col-mat)" : "var(--col-prod)";
+        if(d) {
+            d.innerText = `${this.t('sum')}: ${this.sum} / 100`;
+            d.style.color = this.sum === 100 ? "var(--col-mat)" : "var(--col-prod)";
+        }
         const btn = document.getElementById('btnFinishGuess');
         if(btn) btn.disabled = (this.sum !== 100);
     },
@@ -152,7 +156,7 @@ export const game = {
 
         const box = document.getElementById('longDescBox'); box.innerHTML = "";
         CAT_STRUCT.forEach(c => {
-            box.innerHTML += `<div class="info-detail"><strong><i data-lucide="${c.icon}" size="12"></i> ${this.t('cats.'+c.id+'.l')}:</strong> ${this.t('cats.'+c.id+'.d')}</div>`;
+            box.innerHTML += `<div class="info-detail"><strong>${this.t('cats.'+c.id+'.l')}:</strong> ${this.t('cats.'+c.id+'.d')}</div>`;
         });
 
         const d = DATA[this.sorte];
@@ -160,26 +164,28 @@ export const game = {
         document.getElementById('absVal').innerText = absKg;
         
         const eol = document.getElementById('eolBox');
-        let eolText = "";
-        if(this.sorte === "Instant") eolText = this.t('eol.text_glass');
-        if(this.sorte === "Filter") eolText = this.t('eol.text_grounds');
-        if(this.sorte === "Kapsel") eolText = this.t('eol.text_waste');
-
-        eol.innerHTML = `End-of-Life: ${eolText} <br> <span style="font-size:1.5em">${d.afterlife > 0 ? '+' : ''}${d.afterlife}</span>`;
+        const eolKey = this.sorte === "Instant" ? "text_glass" : (this.sorte === "Filter" ? "text_grounds" : "text_waste");
+        eol.innerHTML = `End-of-Life: ${this.t('eol.'+eolKey)} <br> <span style="font-size:1.5em">${d.afterlife > 0 ? '+' : ''}${d.afterlife}</span>`;
         eol.style.color = d.afterlife < 0 ? "var(--col-mat)" : "#C62828";
-        eol.style.background = d.afterlife < 0 ? "#E8F5E9" : "#FFEBEE";
         eol.style.borderColor = d.afterlife < 0 ? "var(--col-mat)" : "#C62828";
     },
 
     initPhase5: function() {
         ['Instant','Filter','Kapsel'].forEach(s => CAT_STRUCT.forEach(c => this.multipliers[s][c.id] = 1));
         this.elecFactor = 1.0;
-        
         const box = document.getElementById('measuresBox'); box.innerHTML = "";
         MEASURE_DEFS.forEach(m => {
             if(m.scope !== 'all' && m.scope !== this.sorte) return;
             box.innerHTML += `<button class="measure-btn" onclick="game.toggleMeasure(this, '${m.id}')">${this.t('measures.'+m.id)}</button>`;
         });
+        
+        // Platzhalter für das Zertifikat in HTML hinzufügen, falls nicht vorhanden
+        if(!document.getElementById('certificateWrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.id = 'certificateWrapper';
+            document.getElementById('phase5').appendChild(wrapper);
+        }
+        
         this.updateSim();
     },
 
@@ -203,18 +209,16 @@ export const game = {
                 if(CAT_STRUCT[i].phase === "Nutzung") val *= this.elecFactor;
                 sum += val;
             });
-            let total = DATA[s].abs * (sum / 100) + DATA[s].afterlife;
-            return (total/1000).toFixed(3);
+            return ((DATA[s].abs * (sum / 100) + DATA[s].afterlife)/1000).toFixed(3);
         };
 
-        const val = getKg(this.sorte);
-        const startVal = ((DATA[this.sorte].abs + DATA[this.sorte].afterlife)/1000).toFixed(3);
+        const val = parseFloat(getKg(this.sorte));
+        const startVal = parseFloat(((DATA[this.sorte].abs + DATA[this.sorte].afterlife)/1000).toFixed(3));
         const saving = (100 - (val/startVal*100)).toFixed(1);
         document.getElementById('savingText').innerText = `${this.t('saving')}: -${saving}%`;
 
-        const ctx = document.getElementById('simChart');
         if(this.charts.sim) this.charts.sim.destroy();
-        this.charts.sim = new Chart(ctx, {
+        this.charts.sim = new Chart(document.getElementById('simChart'), {
             type: 'bar',
             data: {
                 labels: [this.t('type_instant'), this.t('type_filter'), this.t('type_kapsel')],
@@ -225,8 +229,46 @@ export const game = {
                 }]
             }, options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
+
+        // Zertifikat rendern
+        this.renderCertificate(saving);
+    },
+
+    renderCertificate: function(savingPct) {
+        const wrapper = document.getElementById('certificateWrapper');
+        if(!wrapper) return;
+
+        // Nur anzeigen, wenn eine Ersparnis da ist oder Maßnahmen aktiv sind
+        if(savingPct <= 0) {
+            wrapper.innerHTML = "";
+            return;
+        }
+
+        let medal = "🥉 Bronze";
+        let medalColor = "#cd7f32";
+        if(savingPct > 20) { medal = "🥈 Silber"; medalColor = "#C0C0C0"; }
+        if(savingPct > 50) { medal = "🥇 Gold"; medalColor = "#FFD700"; }
+
+        // Zufälligen Fun Fact auswählen (nur beim ersten Mal oder beim Rendern)
+        if(!this.currentFact) {
+            this.currentFact = FUN_FACTS[Math.floor(Math.random() * FUN_FACTS.length)];
+        }
+
+        wrapper.innerHTML = `
+            <div class="certificate" style="border-color: ${medalColor}">
+                <h4>📜 Coffee Sustainability Certificate</h4>
+                <p>Du hast den Fußabdruck deines <strong>${this.t('type_'+this.sorte.toLowerCase())}s</strong> um</p>
+                <div style="font-size: 2em; font-weight: bold; color: var(--col-mat);">${savingPct}% reduziert!</div>
+                <div style="font-size: 1.2em; margin: 10px 0;">Rang: <span style="color:${medalColor}; font-weight:bold;">${medal}</span></div>
+                <div class="fun-fact-box">
+                    <p>${this.currentFact}</p>
+                </div>
+                <button class="btn-primary" style="width:auto; padding: 10px 20px; font-size: 0.8em;" onclick="window.print()">
+                    🖨️ Zertifikat drucken / PDF
+                </button>
+            </div>
+        `;
     }
 };
 
-// Damit HTML onclick="game.xyz()" funktioniert:
 window.game = game;
