@@ -234,37 +234,39 @@ export const game = {
         this.renderCertificate(saving);
     },
 
-    renderCertificate: function(savingPct) {
+renderCertificate: function(savingPct) {
         const wrapper = document.getElementById('certificateWrapper');
         if(!wrapper) return;
 
-        // Nur anzeigen, wenn eine Ersparnis da ist oder Maßnahmen aktiv sind
         if(savingPct <= 0) {
             wrapper.innerHTML = "";
             return;
         }
 
+        // Medaillen bleiben gleich (Emojis sind universal)
         let medal = "🥉 Bronze";
         let medalColor = "#cd7f32";
         if(savingPct > 20) { medal = "🥈 Silber"; medalColor = "#C0C0C0"; }
         if(savingPct > 50) { medal = "🥇 Gold"; medalColor = "#FFD700"; }
 
-        // Zufälligen Fun Fact auswählen (nur beim ersten Mal oder beim Rendern)
-        if(!this.currentFact) {
-            this.currentFact = FUN_FACTS[Math.floor(Math.random() * FUN_FACTS.length)];
+        // Fun Fact aus der Übersetzung laden (zufällig)
+        const facts = this.t('certificate.facts');
+        if(!this.currentFactIndex && this.currentFactIndex !== 0) {
+            this.currentFactIndex = Math.floor(Math.random() * facts.length);
         }
+        const currentFact = facts[this.currentFactIndex];
 
         wrapper.innerHTML = `
             <div class="certificate" style="border-color: ${medalColor}">
-                <h4>📜 Coffee Sustainability Certificate</h4>
-                <p>Du hast den Fußabdruck deines <strong>${this.t('type_'+this.sorte.toLowerCase())}s</strong> um</p>
-                <div style="font-size: 2em; font-weight: bold; color: var(--col-mat);">${savingPct}% reduziert!</div>
-                <div style="font-size: 1.2em; margin: 10px 0;">Rang: <span style="color:${medalColor}; font-weight:bold;">${medal}</span></div>
+                <h4>${this.t('certificate.title')}</h4>
+                <p>${this.t('certificate.prefix')} <strong>${this.t('type_'+this.sorte.toLowerCase())}</strong></p>
+                <div style="font-size: 2em; font-weight: bold; color: var(--col-mat);">${savingPct}% ${this.t('certificate.reduced')}</div>
+                <div style="font-size: 1.2em; margin: 10px 0;">${this.t('certificate.rank')}: <span style="color:${medalColor}; font-weight:bold;">${medal}</span></div>
                 <div class="fun-fact-box">
-                    <p>${this.currentFact}</p>
+                    <p>${currentFact}</p>
                 </div>
                 <button class="btn-primary" style="width:auto; padding: 10px 20px; font-size: 0.8em;" onclick="window.print()">
-                    🖨️ Zertifikat drucken / PDF
+                    ${this.t('certificate.print')}
                 </button>
             </div>
         `;
@@ -272,3 +274,4 @@ export const game = {
 };
 
 window.game = game;
+
