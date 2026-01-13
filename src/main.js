@@ -1,6 +1,6 @@
 import { game } from './game.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Standard-Sprache setzen (startet Init)
+    // Initialisierung
     game.setLang('de');
 });
