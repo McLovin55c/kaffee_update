@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee LCA Expert - Modular</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="game.setLang('de')">DE</button>
+        <button class="lang-btn" onclick="game.setLang('en')">EN</button>
+    </div>
+
+    <div class="header">
+        <h2 id="ui_title">☕ Kaffee LCA Expert</h2>
+        <div id="progress" style="font-weight:bold; color: #888;">Phase 1/5</div>
+    </div>
+
+    <div id="phase1" class="phase">
+        <h3 id="ui_p1_title">Loading...</h3>
+        <div class="selection-grid">
+            <div class="select-card" onclick="game.start(2, 'Instant')">
+                <i data-lucide="coffee" size="40"></i>
+                <h3 id="ui_type_instant">Instant</h3>
+                <p id="ui_desc_instant">...</p>
+            </div>
+            <div class="select-card" onclick="game.start(2, 'Filter')">
+                <i data-lucide="filter" size="40"></i>
+                <h3 id="ui_type_filter">Filter</h3>
+                <p id="ui_desc_filter">...</p>
+            </div>
+            <div class="select-card" onclick="game.start(2, 'Kapsel')">
+                <i data-lucide="disc" size="40"></i>
+                <h3 id="ui_type_kapsel">Kapsel</h3>
+                <p id="ui_desc_kapsel">...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="phase2" class="phase hidden">
+        <div class="sort-container">
+            <div>
+                <p id="ui_p2_instr">...</p>
+                <div id="sourceContainer" class="source-box"></div>
+                <div class="drop-grid">
+                    <div class="drop-zone zone-mat" id="zone_Material" data-target="Material"><h4 id="ui_zone_mat">Material</h4></div>
+                    <div class="drop-zone zone-prod" id="zone_Herstellung" data-target="Herstellung"><h4 id="ui_zone_prod">Herstellung</h4></div>
+                    <div class="drop-zone zone-use" id="zone_Nutzung" data-target="Nutzung"><h4 id="ui_zone_use">Nutzung</h4></div>
+                    <div class="drop-zone zone-eol" id="zone_EoL" data-target="EoL"><h4 id="ui_zone_eol">EoL</h4></div>
+                </div>
+                <div id="sortFeedback" class="feedback-box" style="display:none;"></div>
+            </div>
+            <div class="lexikon-box">
+                <h4 style="margin-top:0"><i data-lucide="book-open" size="16"></i> <span id="ui_lexikon">Lexikon</span></h4>
+                <div id="lexikonShort" class="scroll-box"></div>
+            </div>
+        </div>
+        <button class="btn-primary" id="btnCheckSort" onclick="game.checkSort()">Check</button>
+        <button class="btn-primary btn-skip" id="btnSkip" onclick="game.nextStep(3)">Skip</button>
+    </div>
+
+    <div id="phase3" class="phase hidden">
+        <h3 id="ui_p3_title">...</h3>
+        <p><span id="ui_p3_instr">...</span> <strong id="sumDisplay" style="color:var(--col-prod)">0 / 100</strong></p>
+        <div id="sliderBox" style="max-width: 700px; margin: 0 auto;"></div>
+        <button class="btn-primary" id="btnFinishGuess" disabled onclick="game.nextStep(4)">Result</button>
+    </div>
+
+    <div id="phase4" class="phase hidden">
+        <div class="result-layout">
+            <div>
+                <h3 id="ui_p4_title">...</h3>
+                <canvas id="resChart" height="250"></canvas>
+                <h4 style="margin-top:20px" id="ui_details">Details:</h4>
+                <div id="longDescBox" class="scroll-box" style="max-height: 250px;"></div>
+            </div>
+            <div>
+                <div class="abs-display">
+                    <p style="margin:0; opacity:0.8">CO₂-Footprint</p>
+                    <h2 id="absVal">0.00</h2>
+                    <p style="margin:0">kg CO₂e</p>
+                </div>
+                <div id="eolBox" class="eol-box"></div>
+                <button class="btn-primary" id="btnSim" onclick="game.nextStep(5)">Sim</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="phase5" class="phase hidden">
+        <div class="result-layout">
+            <div>
+                <h3 id="ui_p5_title">...</h3>
+                <div class="mix-selector">
+                    <strong><i data-lucide="zap" size="16"></i> <span id="ui_elec">Strom</span></strong>
+                    <select id="elecMix" onchange="game.updateSim()">
+                        <option value="1.0" id="opt_eu">🇪🇺 EU</option>
+                        <option value="1.4" id="opt_de">🇩🇪 DE</option>
+                        <option value="0.2" id="opt_fr">🇫🇷 FR</option>
+                        <option value="0.1" id="opt_no">🇳🇴 NO</option>
+                    </select>
+                </div>
+                <strong id="ui_measures">...</strong>
+                <div id="measuresBox" class="measure-grid"></div>
+            </div>
+            <div>
+                <canvas id="simChart" height="300"></canvas>
+                <p id="savingText" style="text-align:center; font-weight:bold; color:var(--col-mat); margin-top:15px;"></p>
+                <button class="btn-primary btn-skip" id="btnRestart" onclick="location.reload()">Restart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+
+</body>
+</html>

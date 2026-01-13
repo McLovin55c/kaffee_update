@@ -1,0 +1,63 @@
+:root {
+    --col-mat: #558B2F; --col-prod: #795548; --col-use: #0277BD; --col-eol: #607D8B;
+    --bg: #f4f6f8; --card-bg: #ffffff; --text: #2c3e50;
+    --radius: 12px;
+}
+body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
+.container { max-width: 1100px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.08); min-height: 80vh; position: relative; }
+
+/* Utilities */
+.hidden { display: none !important; }
+.scroll-box { overflow-y: auto; }
+.source-box { background: #fff; border: 2px solid #eee; padding: 10px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px; min-height: 50px; margin-bottom: 15px; }
+.feedback-box { padding:15px; background:#fff3cd; border-radius:8px; margin-top:10px; }
+.lexikon-box { background: #f9f9f9; padding: 15px; border-radius: 8px; height: fit-content; }
+.eol-box { margin-top:20px; padding:15px; border-radius:8px; text-align:center; font-weight:bold; border: 2px solid var(--col-eol); }
+.mix-selector { margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid var(--col-use); }
+.mix-selector select { width:100%; margin-top:5px; padding:5px; border-radius:4px; border:1px solid #ccc; }
+
+/* Language Switcher */
+.lang-switch { position: absolute; top: 20px; right: 20px; display: flex; gap: 5px; }
+.lang-btn { background: #eee; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8em; }
+.lang-btn.active { background: #333; color: white; }
+
+/* Navigation & Layout */
+.header { display: flex; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top: 20px; }
+h2 { margin: 0; font-weight: 700; color: #333; }
+
+/* Buttons */
+.btn-primary { background: #333; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px; }
+.btn-primary:hover { background: #000; transform: translateY(-2px); }
+.btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+.btn-skip { background: #eee; color: #555; margin-top: 10px; }
+
+/* Cards & Grids */
+.selection-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.select-card { border: 2px solid #eee; border-radius: var(--radius); padding: 25px; text-align: center; cursor: pointer; transition: 0.2s; }
+.select-card:hover { border-color: var(--col-prod); background: #fff8e1; }
+
+.sort-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+@media (max-width: 768px) { .sort-container { grid-template-columns: 1fr; } }
+.drop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.drop-zone { border: 2px dashed #ccc; padding: 10px; border-radius: 8px; min-height: 100px; background: #fafafa; }
+.zone-mat { border-color: var(--col-mat); background: #f1f8e9; }
+.zone-prod { border-color: var(--col-prod); background: #efebe9; }
+.zone-use { border-color: var(--col-use); background: #e1f5fe; }
+.zone-eol { border-color: var(--col-eol); background: #eceff1; }
+
+.card { background: white; padding: 10px; margin: 5px 0; border-radius: 6px; cursor: grab; font-size: 0.85em; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid #ccc; }
+.info-detail { font-size: 0.85em; background: #f9f9f9; padding: 10px; margin-bottom: 5px; border-radius: 4px; border-left: 3px solid #ccc; }
+
+/* Sliders */
+.slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
+.slider-label { width: 140px; font-size: 0.9em; display: flex; align-items: center; gap: 8px; }
+input[type=range] { flex-grow: 1; accent-color: #333; height: 6px; }
+
+/* Results */
+.result-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+.abs-display { background: var(--col-prod); color: white; padding: 20px; border-radius: 12px; text-align: center; }
+.abs-display h2 { font-size: 2.5em; margin: 5px 0; }
+
+.measure-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.measure-btn { border: 1px solid #ddd; background: white; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9em; transition: 0.2s; }
+.measure-btn.active { background: var(--col-mat); color: white; border-color: var(--col-mat); }
