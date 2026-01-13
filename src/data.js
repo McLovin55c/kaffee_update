@@ -28,6 +28,22 @@ export const TRANSLATIONS = {
             Recycling: { l: "Recycling", s: "Stoffliche Verwertung.", d: "Rückgewinnung von Rohstoffen (Gutschrift)." },
             Verwertung: { l: "Therm. Verwertung", s: "Müllverbrennung.", d: "Energiegewinnung aus Abfall." }
         },
+        
+        certificate: {
+            title: "📜 Kaffee-Nachhaltigkeits-Zertifikat",
+            prefix: "Du hast den Fußabdruck deines",
+            reduced: "reduziert!",
+            rank: "Rang",
+            print: "🖨️ Drucken / PDF",
+            facts: [
+                "Wusstest du? Äthiopische Hirten entdeckten Kaffee, weil ihre Ziegen nach dem Verzehr der Beeren tanzten.",
+                "Wusstest du? Die Kaffeebohne ist eigentlich der Samen einer Frucht, die einer Kirsche ähnelt.",
+                "Wusstest du? Finnen trinken weltweit den meisten Kaffee – durchschnittlich ca. 12 kg pro Kopf!",
+                "Wusstest du? Im 16. Jahrhundert wurde Kaffee in Mekka kurzzeitig verboten.",
+                "Wusstest du? Kopi Luwak ist einer der teuersten Kaffees der Welt."
+            ]
+        },
+        
         measures: {
             bio: "Bioanbau", öko: "Ökostrom", spülen: "Eco-Spülung", thermos: "Thermoskanne", beutel: "Nachfüllbeutel", mehrweg: "Mehrweg-Kapsel"
         },
@@ -62,6 +78,21 @@ export const TRANSLATIONS = {
             Recycling: { l: "Recycling", s: "Material Recovery.", d: "Recovery of raw materials (Credit)." },
             Verwertung: { l: "Incineration", s: "Waste to Energy.", d: "Energy generation from waste." }
         },
+
+        certificate: {
+            title: "📜 Coffee Sustainability Certificate",
+            prefix: "You reduced the footprint of your",
+            reduced: "reduced!",
+            rank: "Rank",
+            print: "🖨️ Print / PDF",
+            facts: [
+                "Did you know? Ethiopian shepherds discovered coffee because their goats danced after eating the berries.",
+                "Did you know? The coffee bean is actually the seed of a fruit that resembles a cherry.",
+                "Did you know? Finns drink the most coffee in the world – an average of 12 kg per capita!",
+                "Did you know? In the 16th century, coffee was briefly banned in Mecca.",
+                "Did you know? Kopi Luwak is one of the most expensive coffees in the world."
+            ]
+        },
         measures: {
             bio: "Organic Farming", öko: "Green Power", spülen: "Eco-Wash", thermos: "Thermos Flask", beutel: "Refill Pouch", mehrweg: "Reusable Capsule"
         },
@@ -84,13 +115,6 @@ export const CAT_STRUCT = [
     { id: "Verwertung", phase: "EoL", icon: "flame" }
 ];
 
-export const FUN_FACTS = [
-    "Wusstest du? Äthiopische Hirten entdeckten Kaffee, weil ihre Ziegen nach dem Verzehr der Beeren die ganze Nacht lang tanzten.",
-    "Wusstest du? Die Kaffeebohne ist eigentlich der Samen einer Frucht, die einer Kirsche ähnelt.",
-    "Wusstest du? Finnen trinken weltweit den meisten Kaffee – durchschnittlich ca. 12 kg pro Kopf im Jahr!",
-    "Wusstest du? Im 16. Jahrhundert wurde Kaffee in Mekka kurzzeitig verboten, weil man politische Verschwörungen in Kaffeenhäusern fürchtete.",
-    "Wusstest du? Kopi Luwak ist einer der teuersten Kaffees der Welt und wird aus den Exkrementen von Schleichkatzen gewonnen."
-];
 export const DATA = {
     Instant: { values: [14, 4, 4, 2, 10, 10, 2, 4, 20, 30], abs: 74, afterlife: -2 },
     Filter:  { values: [20, 6, 8, 2, 2, 2, 2, 2, 38, 18], abs: 110, afterlife: -4 },
@@ -105,4 +129,5 @@ export const MEASURE_DEFS = [
     { id: 'beutel', target: 'Verpackung', f: 0.30, scope: 'Instant' },
     { id: 'mehrweg', target: 'Verpackung', f: 0.15, scope: 'Kapsel' }
 ];
+
 
