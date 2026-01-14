@@ -160,8 +160,8 @@ export const game = {
             data: {
                 labels: CAT_STRUCT.slice(0,10).map(c => this.t('cats.'+c.id+'.l')),
                 datasets: [
-                    { label: this.t('chart_guess') || "Guess", data: user, backgroundColor: '#e0e0e0' },
-                    { label: this.t('chart_real') || "Real", data: real, backgroundColor: colors }
+                    { label: this.t('Estimated') || "Guess", data: user, backgroundColor: '#e0e0e0' },
+                    { label: this.t('Real') || "Real", data: real, backgroundColor: colors }
                 ]
             }, options: { responsive: true, scales: { y: { beginAtZero: true, max: 60 } } }
         });
@@ -281,3 +281,4 @@ export const game = {
 };
 
 window.game = game;
+
